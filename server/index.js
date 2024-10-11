@@ -25,6 +25,20 @@ const io = new Server(server, {
   }
 })
 
+io.on('connection', (socket) => {
+  socket.on('join', ({name, room}) => {
+    socket.join(room)
+
+    socket.emit('message', {
+      data: {user: {name: 'admin'}, message: `Hey ${name}`}
+    })
+  })
+
+  io.on('disconnectuon', () => {
+    console.log('Disconnnect')
+  })
+})
+
 server.listen(port, host, () => {
   console.log(`Server running on http://${host}:${port}`);
 })/*.on('error', (err) => {
