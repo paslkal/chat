@@ -1,11 +1,12 @@
 import {Routes, Route} from 'react-router-dom'
-import Log from './Log.jsx'
+import LogIn from './LogIn.jsx'
 import Chat from './Chat.jsx'
-
+import SignUp from './SignUp.jsx'
 function AppRoutes() {
   return (
     <Routes>
-      <Route path='/' element={<Log/>}/>
+      <Route path='/login' element={<LogIn/>}/>
+      <Route path='/signup' element={<SignUp/>}/>
       <Route path='/chat' element={<Chat/>}/>
     </Routes>
   )

@@ -7,6 +7,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import cors from 'cors'
 import { router } from './route.js'
+import addUser from './users.js'
 
 const app = express()
 
@@ -29,12 +30,18 @@ io.on('connection', (socket) => {
   socket.on('join', ({name, room}) => {
     socket.join(room)
 
+    const {user} = addUser({name, room})
+
     socket.emit('message', {
-      data: {user: {name: 'admin'}, message: `Hey ${name}`}
+      data: {user: {name: 'admin'}, message: `Hey ${user.name}`}
+    })
+
+    socket.broadcast.to(user.room).emit('message', {
+      data: {user: {name: 'admin'}, message: `Hey ${user.name} has joined`}
     })
   })
 
-  io.on('disconnectuon', () => {
+  io.on('disconnection', () => {
     console.log('Disconnnect')
   })
 })
