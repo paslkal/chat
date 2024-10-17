@@ -45,6 +45,24 @@ export async function changePassword({ id, password, newPassword }) {
   }
 }
 
+export async function findUser({email, password}) {
+  try {
+    const user = await User.findOne({ 
+      where: {email}
+    });
+
+    if (!user) throw Error('Didn\'t find a user');
+    
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    if (!isMatch) throw Error('Wrong password')
+
+    return user.toJSON()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 User.init({
   // Model attributes are defined here
   id: {

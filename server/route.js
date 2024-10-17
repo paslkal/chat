@@ -1,5 +1,5 @@
 import express from 'express'
-import { createUser, changePassword } from './models/user.js'
+import { createUser, findUser, changePassword } from './models/user.js'
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser'
 
@@ -19,6 +19,21 @@ router.post('/signup', async (req, res) => {
     const {email, password} = req.body
 
     const user = await createUser({email, password})
+  
+    const token = createToken(user.id)
+
+    res.cookie('jwt', token, {httpOnly: true, maxAge})
+    res.json({id: user.id})    
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+router.post('/login', async (req, res) => {
+  try {
+    const {email, password} = req.body
+
+    const user = await findUser({email, password})
   
     const token = createToken(user.id)
 
