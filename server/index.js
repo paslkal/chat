@@ -1,13 +1,8 @@
-// const express = require('express')
-// const http = require('http')
-// const {Server} = require('socket.io')
-// const cors = require('cors')
 import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
 import cors from 'cors'
 import { router } from './route.js'
-import addUser from './users.js'
 
 const app = express()
 
@@ -25,7 +20,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"]
   }
 })
-
+/*
 io.on('connection', (socket) => {
   socket.on('join', ({name, room}) => {
     socket.join(room)
@@ -45,7 +40,7 @@ io.on('connection', (socket) => {
     console.log('Disconnnect')
   })
 })
-
+*/
 server.listen(port, host, () => {
   console.log(`Server running on http://${host}:${port}`);
 })/*.on('error', (err) => {
