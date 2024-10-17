@@ -8,7 +8,7 @@ class User extends Model {
   }
 } 
 
-async function createUser({ email, password }) {
+export async function createUser({ email, password }) {
   try {
     const salt = await bcrypt.genSalt(); 
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -24,7 +24,7 @@ async function createUser({ email, password }) {
   }
 }
 
-async function changePassword({ id, password, newPassword }) {
+export async function changePassword({ id, password, newPassword }) {
   try {
     const user = await User.findOne({ where: { id } });
 
@@ -78,12 +78,3 @@ User.init({
 
 await User.sync();
 console.log('The table for User model has been (re)created');
-
-// Create user
-const user = await createUser({ email: 'paskalsinda@gmail.com', password: 'Inferno228' });
-
-await changePassword({
-  id: user.id, 
-  password: 'Inferno228', 
-  newPassword: 'Inferno'
-})

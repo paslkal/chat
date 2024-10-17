@@ -6,13 +6,16 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const host = 'server'
+const host = 'localhost'
 const port = 5000
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate()
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -34,9 +37,11 @@ export default function SignUp() {
         headers: {"Content-Type": 'application/json'}
       })
 
-      const user = response.json()
+      const user = await response.json()
 
       console.log(user)
+
+      if (user) navigate('/')
     } catch (error) {
       console.log(error)
     }
