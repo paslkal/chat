@@ -12,8 +12,13 @@ async function createUser({ email, password }) {
   try {
     const salt = await bcrypt.genSalt(); 
     const hashedPassword = await bcrypt.hash(password, salt);
-
-    await User.create({ email, password: hashedPassword });
+    
+    
+    const createdUser = await User.create({ email, password: hashedPassword })
+    
+    console.log('User has been created');
+    
+    return createdUser.toJSON()
   } catch (error) {
     console.log(error);
   }
@@ -23,15 +28,19 @@ async function changePassword({ id, password, newPassword }) {
   try {
     const user = await User.findOne({ where: { id } });
 
-    if (!user) return { Error: 'Didn\'t find a user' };
+    if (!user) throw Error('Didn\'t find a user');
 
     const isValid = await bcrypt.compare(password, user.password);
 
-    if (!isValid) return { Error: 'Wrong password' };
+    if (!isValid) throw Error('Wrong password')
 
     const hashedPassword = await bcrypt.hash(newPassword, await bcrypt.genSalt());
-    await user.update({ password: hashedPassword });
+    
+    const changedUser = await user.update({ password: hashedPassword });
+    
     console.log('Password has been updated');
+    
+    return changedUser.toJSON()
   } catch (error) {
     console.log(error);
   }
@@ -49,6 +58,7 @@ User.init({
   email: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
     validate: {
       isEmail: true,
       isLowercase: true
@@ -70,12 +80,10 @@ await User.sync();
 console.log('The table for User model has been (re)created');
 
 // Create user
-await createUser({ email: 'paskalsin@gmail.com', password: 'Inferno228' });
-
-console.log('User has been created');
+const user = await createUser({ email: 'paskalsinda@gmail.com', password: 'Inferno228' });
 
 await changePassword({
-  id: '18ce1c4e-d46b-49dc-9913-bcfecef4785b', 
+  id: user.id, 
   password: 'Inferno228', 
   newPassword: 'Inferno'
 })
