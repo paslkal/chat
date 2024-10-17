@@ -7,7 +7,7 @@ function AppRoutes() {
     <Routes>
       <Route path='/login' element={<LogIn/>}/>
       <Route path='/signup' element={<SignUp/>}/>
-      <Route path='/chat' element={<Chat/>}/>
+      <Route path='/' element={<Chat/>}/>
     </Routes>
   )
 }

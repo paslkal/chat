@@ -34,7 +34,8 @@ export default function SignUp() {
           email,
           password
         }),
-        headers: {"Content-Type": 'application/json'}
+        headers: {"Content-Type": 'application/json'},
+        credentials: 'include'
       })
 
       const user = await response.json()
