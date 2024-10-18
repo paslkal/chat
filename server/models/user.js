@@ -2,11 +2,41 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from './database.js';
 import bcrypt from 'bcrypt';
 
-class User extends Model {
-  getId() {
-    return this.id;
+export default class User extends Model {}  
+
+User.init({
+  // Model attributes are defined here
+  id: {
+    primaryKey: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    unique: true,
+    allowNull: false
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
+      isLowercase: true
+    }   
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   }
-} 
+}, {
+  sequelize,
+  modelName: 'User'
+});
+
+await User.sync();
+console.log('The table for User model has been (re)created');
+
 
 export async function createUser({ email, password }) {
   try {
@@ -62,36 +92,3 @@ export async function findUser({email, password}) {
     console.log(error)
   }
 }
-
-User.init({
-  // Model attributes are defined here
-  id: {
-    primaryKey: true,
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    unique: true,
-    allowNull: false
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
-      isLowercase: true
-    }   
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true
-    }
-  }
-}, {
-  sequelize,
-  modelName: 'User'
-});
-
-await User.sync();
-console.log('The table for User model has been (re)created');

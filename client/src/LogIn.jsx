@@ -40,7 +40,7 @@ export default function LogIn() {
 
       const user = await response.json()
 
-      if (user) navigate('/')
+      if (user) navigate('/chat')
     } catch (error) {
       console.log(error)
     }

@@ -23,7 +23,7 @@ const chats = [
   { id: 4, name: 'Evelena' }
 ];
 
-export default function Chat() {
+export default function ChatRoom() {
   const navigate = useNavigate();
 
   const handleClick = (id) => {
@@ -67,7 +67,7 @@ export default function Chat() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         <Typography>
-          Выберите чат слева, чтобы увидеть сообщения.
+          Сообщения
         </Typography>
       </Box>
     </Box>

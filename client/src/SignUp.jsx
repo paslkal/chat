@@ -42,7 +42,7 @@ export default function SignUp() {
 
       console.log(user)
 
-      if (user) navigate('/')
+      if (user) navigate('/chat')
     } catch (error) {
       console.log(error)
     }
