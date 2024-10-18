@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from './database.js';
 import bcrypt from 'bcrypt';
+import Chat from './chat.js';
 
 export default class User extends Model {}  
 
@@ -34,9 +35,12 @@ User.init({
   modelName: 'User'
 });
 
-await User.sync();
-console.log('The table for User model has been (re)created');
+User.hasMany(Chat, {
+  foreignKey: 'userId',
+  as: 'chats'
+});
 
+User.sync()
 
 export async function createUser({ email, password }) {
   try {

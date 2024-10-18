@@ -1,7 +1,7 @@
 import express from 'express'
 import { createUser, findUser, changePassword } from './models/user.js'
-import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser'
+import { createToken, decodeToken } from './utils/createToken.js'
 
 export const router = express.Router()
 
@@ -10,8 +10,23 @@ const maxAge = 3 * 24 * 60 * 60 * 1000
 router.use(express.json())
 router.use(cookieParser())
 
-router.get('/', (req, res) => {
-  res.send('Hello World')
+const chats = [
+  { id: 1, name: 'Emilio' },
+  { id: 2, name: 'Papa' },
+  { id: 3, name: 'Mama' },
+  { id: 4, name: 'Evelena' }
+];
+
+router.get('/chat', (req, res) => {
+  try {
+    const token = decodeToken(req.cookies.jwt)
+  
+    console.log(token)
+  
+    res.json(chats)    
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 router.post('/signup', async (req, res) => {
@@ -34,6 +49,8 @@ router.post('/login', async (req, res) => {
     const {email, password} = req.body
 
     const user = await findUser({email, password})
+
+    if (!user) throw Error('Didn\' find a user')
   
     const token = createToken(user.id)
 
@@ -43,9 +60,3 @@ router.post('/login', async (req, res) => {
     console.log(error)
   }
 })
-
-const createToken = (id) => {
-  return jwt.sign({id}, 'paslkal secret', {
-    expiresIn: maxAge
-  })
-}

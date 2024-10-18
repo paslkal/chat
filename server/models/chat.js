@@ -1,7 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
+import sequelize from './database.js';
 import User from './user.js';
+import Message from './message.js';
 
-class Chat extends Model {}
+export default class Chat extends Model {}
 
 Chat.init({
   id: {
@@ -9,10 +11,6 @@ Chat.init({
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     unique: true,
-    allowNull: false
-  },
-  message: {
-    type: DataTypes.STRING,
     allowNull: false
   },
   userId: {
@@ -29,16 +27,22 @@ Chat.init({
   modelName: 'Chat',
 });
 
-User.hasMany(Chat, {
-  foreignKey: 'userId',
-  as: 'chats'
-});
+// Chat.hasMany(Message, {
+//   foreignKey: 'chatId',
+//   as: 'messages'
+// })
 
-Chat.belongsTo(User, {
-  foreignKey: 'userId',
-  as: 'user'
-});
+// Chat.belongsTo(User, {
+//   foreignKey: 'userId',
+//   as: 'user'
+// });
 
-await Chat.sync();
+Chat.sync()
 
-console.log('The table for Chat model has been (re)created');
+async function createMessage({message, userId}) {
+  Chat.create({message, userId})
+}
+
+async function getChats() {
+  Chat.findAll()
+}
