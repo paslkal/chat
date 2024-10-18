@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -13,15 +12,12 @@ import ListItemText from '@mui/material/ListItemText';
 import ChatIcon from '@mui/icons-material/Chat';
 import MarkUnreadChatAltIcon from '@mui/icons-material/MarkUnreadChatAlt';
 import {useNavigate} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
+const host = 'localhost'
+const port = 5000
 
 const drawerWidth = 240;
-
-const chats = [
-  { id: 1, name: 'Emilio' },
-  { id: 2, name: 'Papa' },
-  { id: 3, name: 'Mama' },
-  { id: 4, name: 'Evelena' }
-];
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -29,6 +25,32 @@ export default function Chat() {
   const handleClick = (id) => {
     navigate(`/chat/${id}`);
   };
+
+  const [chats, setChats] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://${host}:${port}/chat`, {
+          method: 'GET',
+          credentials: 'include'
+        })
+
+        if (!response.ok) throw Error('Network response was not ok')
+  
+        const chats = await response.json()
+  
+        setChats(chats)
+
+        console.log(chats)
+        
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    
+    fetchData()
+  }, [])
 
   return (
     <Box sx={{ display: 'flex' }}>

@@ -1,6 +1,7 @@
 import express from 'express'
 import { createUser, findUser, changePassword } from './models/user.js'
 import cookieParser from 'cookie-parser'
+import { getChats } from './models/chat.js'
 import { createToken, decodeToken } from './utils/createToken.js'
 
 export const router = express.Router()
@@ -10,20 +11,20 @@ const maxAge = 3 * 24 * 60 * 60 * 1000
 router.use(express.json())
 router.use(cookieParser())
 
-const chats = [
+const fakeChats = [
   { id: 1, name: 'Emilio' },
   { id: 2, name: 'Papa' },
   { id: 3, name: 'Mama' },
   { id: 4, name: 'Evelena' }
 ];
 
-router.get('/chat', (req, res) => {
+router.get('/chat', async (req, res) => {
   try {
-    const token = decodeToken(req.cookies.jwt)
+    const {id} = decodeToken(req.cookies.jwt)
   
-    console.log(token)
-  
-    res.json(chats)    
+    const chats = await getChats(id) 
+
+    res.json(chats.length ? chats : fakeChats)    
   } catch (error) {
     console.log(error)
   }

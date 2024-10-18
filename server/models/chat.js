@@ -43,6 +43,6 @@ async function createMessage({message, userId}) {
   Chat.create({message, userId})
 }
 
-async function getChats() {
-  Chat.findAll()
+export async function getChats(id) {
+  return await Chat.findAll({where: {id}})
 }
