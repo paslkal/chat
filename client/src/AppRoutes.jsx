@@ -10,7 +10,8 @@ function AppRoutes() {
       <Route path='/login' element={<LogIn/>}/>
       <Route path='/signup' element={<SignUp/>}/>
       <Route path='/chat' element={<Chat/>}/>
-      <Route path='/chat/:id' element={<ChatRoom />} /> 
+      <Route path='/chat/:id' element={<ChatRoom />} />
+      <Route path='*' element={<Chat/>}></Route> 
     </Routes>
   )
 }
