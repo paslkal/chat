@@ -40,6 +40,8 @@ Message.init({
   modelName: 'Message'
 })
 
+// sequelize.model(Message).belongsTo(User)
+
 // Message.belongsTo(User ,{
 //   foreignKey: 'userId',
 //   as: 'user'

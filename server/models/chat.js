@@ -27,10 +27,10 @@ Chat.init({
   modelName: 'Chat',
 });
 
-// Chat.hasMany(Message, {
-//   foreignKey: 'chatId',
-//   as: 'messages'
-// })
+Chat.hasMany(Message, {
+  foreignKey: 'chatId',
+  as: 'messages'
+})
 
 // Chat.belongsTo(User, {
 //   foreignKey: 'userId',
