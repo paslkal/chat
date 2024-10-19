@@ -18,6 +18,11 @@ const fakeChats = [
   { id: 4, name: 'Evelena' }
 ];
 
+const fakeMessages = [
+  'hi',
+  'hello'
+]
+
 router.get('/chat', async (req, res) => {
   try {
     const {id} = decodeToken(req.cookies.jwt)
@@ -28,6 +33,20 @@ router.get('/chat', async (req, res) => {
   } catch (error) {
     console.log(error)
   }
+})
+
+router.get('/chat/:chatId', (req, res)  => {
+  const {chatId} = req.params
+
+  res.json({messages: fakeMessages})
+})
+
+router.post('/chat/:id', (req, res)  => {
+  const {id} = req.params
+
+  const {message} = req.body
+
+  res.json({messages: fakeMessages})
 })
 
 router.post('/signup', async (req, res) => {

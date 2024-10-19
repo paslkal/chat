@@ -22,11 +22,6 @@ const port = 5000
 
 const drawerWidth = 240;
 
-const messages = [
-  'hi',
-  'hello'
-]
-
 export default function ChatRoom() {
   const navigate = useNavigate();
 
@@ -36,6 +31,52 @@ export default function ChatRoom() {
 
   const [chats, setChats] = useState([])
   const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState([])
+
+  const getChatId = () => {
+    return location.pathname.split('/').filter(Boolean).at(-1)
+  }
+
+  const createMessages = async (id) => {
+    const response = await fetch(`http://${host}:${port}/chat/${id}`, {
+      method: 'POST',
+      body: JSON.stringify({message}),
+      headers: {"Content-type":"application/json"},
+      credentials: 'include'
+    })
+
+    if (!response.ok) throw Error('Network response was not ok')
+
+    const {messages} = await response.json()
+
+    return messages
+  }
+
+  const fetchMessages = async (id) => {
+    const response = await fetch(`http://${host}:${port}/chat/${id}`, {
+      method: 'GET',
+      credentials: 'include'
+    })
+
+    if (!response.ok) throw Error('Network response was not ok')
+
+    const {messages} = await response.json()
+
+    return messages
+  }
+
+  const fetchChats = async () => {
+    const response = await fetch(`http://${host}:${port}/chat`, {
+      method: 'GET',
+      credentials: 'include'
+    })
+
+    if (!response.ok) throw Error('Network response was not ok')
+
+    const chats = await response.json()
+
+    return chats
+  }
 
   const handleMessage = (e) => {
     setMessage(e.target.value)
@@ -43,28 +84,18 @@ export default function ChatRoom() {
 
   const handleSend = async () => {
     setMessage('')
-
+    
     try {
-      const response = await fetch(`http://${host}:${port}/chat`, {
-        method: 'POST',
-        body: JSON.stringify({message}),
-        headers: {"Content-type":"application/json"},
-        credentials: 'include'
-      })
+      const id = getChatId()
 
-      if (!response.ok) throw Error('Network response was not ok')
+      const fetchedMessages = await createMessages(id)
 
-      const chats = await response.json()
-
-      setChats(chats)
-
-      console.log(chats)
-      
+      setMessages(fetchedMessages)
     } catch (error) {
       console.log(error)
     }
-
-    messages.push(message)
+    
+    intialMessages.push(message)
   }
 
   const handleEnter = (e) => {
@@ -74,19 +105,11 @@ export default function ChatRoom() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://${host}:${port}/chat`, {
-          method: 'GET',
-          credentials: 'include'
-        })
-
-        if (!response.ok) throw Error('Network response was not ok')
-  
-        const chats = await response.json()
-  
-        setChats(chats)
-
-        console.log(chats)
-        
+        const id = getChatId()
+        const fetchedChats = await fetchChats()
+        const fetchedMessages = await fetchMessages(id)
+        setChats(fetchedChats)        
+        setMessages(fetchedMessages)
       } catch (error) {
         console.log(error)
       }
