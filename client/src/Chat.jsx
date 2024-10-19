@@ -58,7 +58,7 @@ export default function Chat() {
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-            Clipped drawer
+            Chat App
           </Typography>
         </Toolbar>
       </AppBar>

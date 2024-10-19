@@ -1,3 +1,7 @@
+import Input from '@mui/material/Input';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send'
+import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -57,7 +61,7 @@ export default function ChatRoom() {
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-            Clipped drawer
+            Chat app
           </Typography>
         </Toolbar>
       </AppBar>
@@ -89,6 +93,10 @@ export default function ChatRoom() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
+        <Stack direction='row' spacing={2}>
+          <Input placeholder='Some message'/>
+          <Button variant='contained' endIcon={<SendIcon/>}>Send</Button>
+        </Stack>
         <Typography>
           Сообщения
         </Typography>
