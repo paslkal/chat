@@ -30,6 +30,19 @@ export default function ChatRoom() {
   };
 
   const [chats, setChats] = useState([])
+  const [message, setMessage] = useState('')
+
+  const handleMessage = (e) => {
+    setMessage(e.target.value)
+  }
+
+  const handleSend = () => {
+    setMessage('')
+  }
+
+  const handleEnter = (e) => {
+    if (e.key === 'Enter') handleSend()
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,8 +107,19 @@ export default function ChatRoom() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         <Stack direction='row' spacing={2}>
-          <Input placeholder='Some message'/>
-          <Button variant='contained' endIcon={<SendIcon/>}>Send</Button>
+          <Input 
+            placeholder='Some message'
+            value={message}
+            onChange={handleMessage}
+            onKeyDown={handleEnter}
+          />
+          <Button
+            variant='contained' 
+            endIcon={<SendIcon/>}
+            onClick={handleSend}
+          >
+            Send
+          </Button>
         </Stack>
         <Typography>
           Сообщения
