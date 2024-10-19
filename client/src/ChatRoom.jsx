@@ -22,6 +22,11 @@ const port = 5000
 
 const drawerWidth = 240;
 
+const messages = [
+  'hi',
+  'hello'
+]
+
 export default function ChatRoom() {
   const navigate = useNavigate();
 
@@ -36,8 +41,12 @@ export default function ChatRoom() {
     setMessage(e.target.value)
   }
 
-  const handleSend = () => {
+  const handleSend = async () => {
     setMessage('')
+
+    // await fetch(`http://${host}:${port}/message`)
+
+    messages.push(message)
   }
 
   const handleEnter = (e) => {
@@ -106,24 +115,29 @@ export default function ChatRoom() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        <Stack direction='row' spacing={2}>
-          <Input 
-            placeholder='Some message'
-            value={message}
-            onChange={handleMessage}
-            onKeyDown={handleEnter}
-          />
-          <Button
-            variant='contained' 
-            endIcon={<SendIcon/>}
-            onClick={handleSend}
-          >
-            Send
-          </Button>
+        <Stack direction='column' spacing={2}>
+          {
+            messages.map(message => 
+              <Typography>{message}</Typography>
+            )
+          }
+          <Stack direction='row' spacing={2}>
+            <Input 
+              placeholder='Some message'
+              value={message}
+              onChange={handleMessage}
+              onKeyDown={handleEnter}
+            />
+            <Button
+              variant='contained' 
+              endIcon={<SendIcon/>}
+              onClick={handleSend}
+            >
+              Send
+            </Button>
+          </Stack>
         </Stack>
-        <Typography>
-          Сообщения
-        </Typography>
+        
       </Box>
     </Box>
   );
