@@ -44,7 +44,25 @@ export default function ChatRoom() {
   const handleSend = async () => {
     setMessage('')
 
-    // await fetch(`http://${host}:${port}/message`)
+    try {
+      const response = await fetch(`http://${host}:${port}/chat`, {
+        method: 'POST',
+        body: JSON.stringify({message}),
+        headers: {"Content-type":"application/json"},
+        credentials: 'include'
+      })
+
+      if (!response.ok) throw Error('Network response was not ok')
+
+      const chats = await response.json()
+
+      setChats(chats)
+
+      console.log(chats)
+      
+    } catch (error) {
+      console.log(error)
+    }
 
     messages.push(message)
   }
